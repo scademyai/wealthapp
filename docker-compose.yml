@@ -14,8 +14,7 @@ services:
       - /usr/src/app/.venv
     ports:
       - 9090:9090
-    command: >
-      sh -c "source .venv/bin/activate && python -m flask run --host 0.0.0.0 --port 9090"
+    command: python -m flask run --host 0.0.0.0 --port 9090 --debug
     networks:
       - wealthapp
     depends_on:

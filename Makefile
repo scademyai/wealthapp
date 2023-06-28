@@ -47,7 +47,7 @@ test-frontend:
 	docker compose exec -T $(container_frontend) /bin/sh -c "yarn test"
 
 test-backend:
-	docker compose exec -T $(container_backend) /bin/sh -c "$(test_env_setting) source .venv/bin/activate && python -m nose2 -v"
+	docker compose exec -T $(container_backend) /bin/sh -c "$(test_env_setting) python -m nose2 -v"
 
 # get a shell within the app container
 sh:
@@ -79,13 +79,13 @@ tpsql:
 
 # run all migrations
 migrate:
-	docker compose exec $(container_backend) /bin/sh -c "source .venv/bin/activate && alembic upgrade head"
+	docker compose exec $(container_backend) /bin/sh -c "alembic upgrade head"
 
 tmigrate:
-	docker compose exec $(container_backend) /bin/sh -c "$(test_env_setting) source .venv/bin/activate && alembic upgrade head"
+	docker compose exec $(container_backend) /bin/sh -c "$(test_env_setting) alembic upgrade head"
 
 rollback:
-	docker compose exec $(container_backend) /bin/sh -c "source .venv/bin/activate && alembic downgrade -1"
+	docker compose exec $(container_backend) /bin/sh -c "alembic downgrade -1"
 
 trollback:
-	docker compose exec $(container_backend) /bin/sh -c "$(test_env_setting) source .venv/bin/activate&& alembic downgrade -1"
+	docker compose exec $(container_backend) /bin/sh -c "$(test_env_setting) alembic downgrade -1"

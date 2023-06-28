@@ -1,4 +1,5 @@
 from datetime import timedelta, datetime
+import json
 import os
 from uuid import uuid4
 
@@ -21,7 +22,7 @@ def __configure_cors(app):
 
 
 def __init_db(app):
-    app.config.from_json('config.json')
+    app.config.from_file('config.json', load=json.load)
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DATABASE_URL"]
     app.config["DATABASE_URL"] = os.environ["DATABASE_URL"]
 

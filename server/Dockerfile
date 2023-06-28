@@ -1,15 +1,13 @@
-FROM python:3.5.10-alpine
+FROM python:3.11.4-alpine
 
 RUN apk update && apk upgrade
-RUN apk add --no-cache curl postgresql-libs vim && \
-    apk add --no-cache --virtual .build-deps gcc g++ musl-dev postgresql-dev libffi-dev
+RUN apk add --no-cache curl git postgresql-libs vim 
+RUN apk add --no-cache --virtual .build-deps gcc g++ postgresql-dev musl-dev
 
 RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app
 
-RUN python -m venv .venv
+COPY . /usr/src/app
 
-COPY . .
-
-RUN source .venv/bin/activate && pip install -r requirements.txt
+RUN pip install -r requirements.txt
