@@ -1,0 +1,8 @@
+Flask==1.1.4
+alembic==1.4.2
+Flask-SQLAlchemy==2.5.1
+Flask-Cors==3.0.10
+Flask-JWT-Extended==3.25.1
+nose2==0.12.0
+pytruth==1.1.0
+psycopg2==2.8.6

@@ -1,0 +1,10 @@
+{
+    "/api": {
+        "target": "http://wealthapp-backend:9090",
+        "secure": false,
+        "pathRewrite": {
+            "^/api": ""
+        },
+        "logLevel": "debug"
+    }
+}

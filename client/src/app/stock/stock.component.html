@@ -1,0 +1,24 @@
+<div class="flex flex-col items-center justify-center">
+    <form [formGroup]="stockForm" class="m-8">
+        <mat-form-field class="h-20 w-80 flex" class="text-black">
+            <mat-label class="text-black">Filter...</mat-label>
+            <input matInput formControlName="filterBar" placeholder="MSFT" class="resize-none">
+        </mat-form-field>
+        <button class="button" type="submit" (click)="getStock()">
+            <mat-icon class="text-white ml-3">search</mat-icon>
+        </button>
+    </form>
+    <table class="w-[30%]" *ngIf="stock">
+        <tr class="info-table">
+            <th class="info-table">Name</th>
+            <th class="font-normal">{{stock.ticker}}</th>
+        </tr>
+        <tr class="info-table">
+            <td class="info-table">Price</td>
+            <td class="font-normal">{{stock.price}}</td>
+        </tr>
+    </table>    
+</div>
+
+
+

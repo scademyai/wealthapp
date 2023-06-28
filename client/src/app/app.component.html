@@ -1,0 +1,32 @@
+<mat-toolbar class="bg-secondary flex justify-between" >
+    <a routerLink="/" class="basis-1/4 inline-flex items-center">
+      <img src="/assets/wealthapp-logo.png" width="40" height="40" class="m-2 mr-4 rounded-full" />
+      <span class="text-white">WealthApp</span>
+    </a>
+    <div class="flex basis-1/2 justify-center">
+        <button class="p-2 uppercase" mat-icon-button matTooltip="Homepage" routerLink="/home" routerLinkActive="active">
+            <span class="text-white">Home</span>
+        </button>    
+        <button *ngIf="isLoggedIn" class="p-2 uppercase" mat-icon-button matTooltip="My stocks" routerLink="/my-portfolio" routerLinkActive="active">
+            <span class="text-white">My portfolio</span>
+        </button>   
+        <button *ngIf="isLoggedIn" class="p-2 uppercase" mat-icon-button matTooltip="Search for stocks" routerLink="/stocks" routerLinkActive="active">
+            <span class="text-white">Search</span>
+        </button>   
+        <button class="p-2 uppercase" mat-icon-button matTooltip="Get more info about a stock" routerLink="/stock" routerLinkActive="active">
+            <span class="text-white">Stock info</span>
+        </button>   
+    </div>
+    <div class="flex basis-1/4 justify-end items-center">
+        <button *ngIf="!isLoggedIn" mat-icon-button matTooltip="Login" (click)="login()">
+            <mat-icon class="text-white">login</mat-icon>
+        </button>
+        <div *ngIf="isLoggedIn" class="flex items-center">
+            <span class="text-white mr-2">Welcome!</span>
+            <button *ngIf="isLoggedIn" class="mt-2" mat-icon-button matTooltip="Logout" (click)="logout()">
+                <mat-icon class="text-white">logout</mat-icon>
+            </button>
+        </div>
+    </div>
+</mat-toolbar>
+<router-outlet></router-outlet>

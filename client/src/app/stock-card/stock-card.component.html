@@ -1,0 +1,17 @@
+<div class="flex flex-row items-center border-2 border-solid border-goldish rounded-lg p-6">
+    <img src="assets/wealthapp-logo.png" class="w-32 flex flex-col mr-8 rounded-lg">
+    <div class="flex flex-col items-end">
+        <span class="text-md">
+            {{ ticker }}
+        </span>
+        <span class="text-lg font-bold">
+            {{ price }}$
+        </span>
+        <button *ngIf="!myPortfolio" class="p-1 px-4 mt-4 rounded-lg bg-goldish" >
+            Add Stock
+        </button>
+        <button *ngIf="myPortfolio" class="p-1 px-4 mt-4 rounded-lg bg-goldish">
+            Delete Stock
+        </button>
+    </div>
+</div>

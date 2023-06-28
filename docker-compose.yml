@@ -1,0 +1,56 @@
+version: '3'
+services:
+  wealthapp-backend:
+    environment:
+      FLASK_APP: wapp.factory:create_app
+      FLASK_ENV: development
+      DATABASE_URL: postgresql://app_dev:dev_password@postgres/dev
+    env_file: .env
+    build: ./server/
+    image: wealthapp-backend
+    working_dir: /usr/src/app/
+    volumes:
+      - ./server/:/usr/src/app/
+      - /usr/src/app/.venv
+    ports:
+      - 9090:9090
+    command: >
+      sh -c "source .venv/bin/activate && python -m flask run --host 0.0.0.0 --port 9090"
+    networks:
+      - wealthapp
+    depends_on:
+      - postgres
+
+  wealthapp-frontend:
+    build: ./client/
+    image: wealthapp-frontend
+    working_dir: /usr/src/app/
+    volumes:
+      - ./client/:/usr/src/app/
+      - /usr/src/app/node_modules
+    ports:
+      - 4200:4200
+    command: >
+      sh -c "ng serve --host 0.0.0.0 --poll=500"
+    networks:
+      - wealthapp
+
+  postgres:
+    image: postgres:14.8-alpine
+    environment:
+      POSTGRES_DB: dev
+      POSTGRES_USER: app_dev
+      POSTGRES_PASSWORD: dev_password
+      ALLOW_IP_RANGE: "172.0.0.0/8"
+    command: ["postgres", "-c", "log_statement=none"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+      - ./docker/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/
+    networks:
+      - wealthapp
+
+networks:
+  wealthapp:
+
+volumes:
+  pgdata:

@@ -1,0 +1,10 @@
+
+    <div class="flex justify-center uppercase font-bold text-5xl m-8">
+        <span>My Stocks</span></div>
+    <mat-grid-list cols="4" rowHeight="2:1" gutterSize="20px" class="mx-32">
+        <mat-grid-tile *ngFor="let stock of stocks">
+            <div>
+                <app-stock-card [ticker]="stock.ticker" [price]="stock.price" [myPortfolio]="true"></app-stock-card>
+            </div>
+        </mat-grid-tile>
+    </mat-grid-list>

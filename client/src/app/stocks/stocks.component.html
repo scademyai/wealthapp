@@ -1,0 +1,20 @@
+<div class="flex justify-center">
+    <form [formGroup]="stockForm" class="m-8">
+        <mat-form-field class="h-20 w-80 flex">
+            <mat-label>Filter...</mat-label>
+            <input matInput formControlName="filterBar" placeholder="AAPL, TSLA, MSFT..." class="resize-none">
+        </mat-form-field>
+        <button class="button" type="submit" (click)="getStocks()">
+            <mat-icon class="text-white ml-3">search</mat-icon>
+        </button>
+    </form>
+</div>
+
+
+<mat-grid-list cols="4" rowHeight="2:1" gutterSize="20px" class="mx-32">
+    <mat-grid-tile *ngFor="let stock of stocks">
+        <div>
+            <app-stock-card [ticker]="stock.ticker" [price]="stock.price" [myPortfolio]="false"></app-stock-card>
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>
