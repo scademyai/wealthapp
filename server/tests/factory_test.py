@@ -22,7 +22,7 @@ class TestFactoryHttp(TestClientMixin, DbMixin, AppTestCase):
     def test_stocks_returns_stocks(self, stocks_mock):
         stocks_mock.return_value=[{"ticker": "TSLA"}]
 
-        r = self.client.post("/stocks/", json={"symbols": ["TSLA"]})
+        r = self.client.get("/stocks/?symbols=TSLA")
         
         AssertThat(r.status_code).IsEqualTo(200)
         AssertThat(r.json).ContainsExactly({"ticker": "TSLA"})

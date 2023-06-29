@@ -22,12 +22,18 @@ STOCKS = [
 def get_stocks(s_list):
     return [get_stock(ticker) for ticker in s_list]
 
-def get_stock(ticker:str) -> dict:
+def get_stock_response(ticker):
     url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36"
     }
-    response = requests.get(url, headers=headers)
+    
+    return requests.get(url, headers=headers)
+    
+
+def get_stock(ticker:str) -> dict:
+    
+    response = get_stock_response(ticker)
     
     if response.status_code != 200:
         return None

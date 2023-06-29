@@ -28,7 +28,7 @@ export class StocksComponent implements OnInit{
   getStocks(): void {
     let searchedStocks = this.extractStockSymbols();
 
-    this.http.post<Stock[]>('/api/stocks/', { "symbols": searchedStocks }).pipe(
+    this.http.get<Stock[]>(`/api/stocks/?symbols=${searchedStocks}`).pipe(
       take(1),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 400) {

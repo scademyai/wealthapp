@@ -1,26 +1,24 @@
 from flask import Blueprint, jsonify, request, current_app
-from wapp.lib.stocks import get_stocks
+from wapp.lib.stocks import get_stock, get_stocks
+from .symbol.blueprint import blueprint as symbol_blueprint
 
 blueprint = Blueprint('stocks', __name__)
+blueprint.register_blueprint(symbol_blueprint, url_prefix='/')
 
 class Stock:
-    @blueprint.route('/', methods=['POST'])
+    @blueprint.route('/', methods=['GET'])
     def get_stocks_route():
-        # Check if request has a JSON content type
-        if not request.is_json:
+        
+         # Get "symbols" from query parameters
+        symbols_str = request.args.get("symbols")
+        
+        # Check if "symbols" query parameter exists
+        if symbols_str is None:
             current_app.logger.error("Invalid request format.")
             return jsonify({"error": "NOK"}), 400
 
-        # Check if "symbols" key exists in the request body
-        symbols = request.json.get("symbols")
-        if symbols is None:
-            current_app.logger.error("Invalid request format.")
-            return jsonify({"error": "NOK"}), 400
-
-        # Check if "symbols" value is a list
-        if not isinstance(symbols, list):
-            current_app.logger.error("Invalid request format.")
-            return jsonify({"error": "NOK"}), 400
+        # Split symbols string into a list
+        symbols = symbols_str.split(',')
 
         # Validate stock symbols
         for symbol in symbols:
