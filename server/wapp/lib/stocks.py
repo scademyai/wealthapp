@@ -17,9 +17,10 @@ STOCKS = [
 ]
 
 def get_stocks(s_list):
-    if len(s_list) == 1:
-        return next(filter(lambda stock: stock["ticker"] == s_list[0], STOCKS))
+    if not s_list:
+        return STOCKS
     else:
         return [stock for stock in STOCKS if stock["ticker"] in s_list]
+
 def get_a_single_stock(stockTicker:str):
     return next(filter(lambda stock: stock["ticker"] == stockTicker, STOCKS))

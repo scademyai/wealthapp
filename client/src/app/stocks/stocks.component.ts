@@ -1,70 +1,59 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Stock } from '../model';
 import { HttpService } from '../http.service';
-import { take } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { throwError, take } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-stocks',
   templateUrl: './stocks.component.html',
   styleUrls: ['./stocks.component.scss']
 })
-export class StocksComponent {
+export class StocksComponent implements OnInit{
   constructor(private http: HttpService
   ) {}
 
-  
-  stocks: Stock[] = [
-    {
-      "ticker": "TSLA",
-      "price": "270.00",
-      "volume": "1000000"
-  },
-  {
-      "ticker": "AAPL",
-      "price": "200.00",
-      "volume": "2000000"
-  },
-  {
-      "ticker": "GOOG",
-      "price": "1000.00",
-      "volume": "3000000"
+  ngOnInit(): void {
+    this.getStocks();
   }
-];
+
+  stocks: Stock[] = [];
 
   public stockForm = new FormGroup({
     filterBar: new FormControl('')
   });
 
-  getStocks() {
-    let searchedStocks = this.arrayOfStocksSeperatedByComma();
+  getStocks(): void {
+    let searchedStocks = this.extractStockSymbols();
 
-    this.http.post('/api/stocks/', {"symbols": searchedStocks}).pipe(take(1)).subscribe((res) => {
-      if(Array.isArray(res)) {
-        this.stocks = res;
-      }
-      else {
-        this.stocks = [res as Stock];
-      }
+    this.http.post<Stock[]>('/api/stocks/', { "symbols": searchedStocks }).pipe(
+      take(1),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.stocks = [];
+        }
+        return throwError(() => new Error(error.message));
+      })
+    ).subscribe({
+      next: (res: Stock[] | Stock) => {
+        if (Array.isArray(res)) {
+          this.stocks = res;
+        } else {
+          this.stocks = [res as Stock];
+        }
+      },
+      error: (error: any) => { console.error('Error:', error) }
     });
   }
 
-  arrayOfStocksSeperatedByComma() {
-    var arrayOfStocks = [];
-    var currentStock = "";
-    console.log(this.stockForm.value.filterBar);
-    if(this.stockForm.value.filterBar) {
-      for (var i = 0; i < this.stockForm.value.filterBar?.length; i++) {
-        if(this.stockForm.value.filterBar[i] === ',') {
-          arrayOfStocks.push(currentStock);
-          currentStock = "";
-        }
-        else {
-          currentStock += this.stockForm.value.filterBar?.toUpperCase()[i];
-        }
-      }
-      arrayOfStocks.push(currentStock);
+  extractStockSymbols(): string[] {
+    if (!this.stockForm.value.filterBar) {
+      return [];
     }
-    return arrayOfStocks;
+
+    const searchBarValue = this.stockForm.value.filterBar.toUpperCase();
+    return searchBarValue.split(',').map((symbol: string) => symbol.trim());
   }
 }

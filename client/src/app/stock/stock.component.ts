@@ -28,13 +28,11 @@ export class StockComponent {
         if (error.status === 400) {
           this.stock = null;
         }
-        return throwError(error);
+        return throwError(() => new Error(error.message));
       })
-    ).subscribe((res: Stock) => {
-        this.stock = res;
-       
-    }, (error: any) => {
-      console.error('Error:', error);
-    });
+    ).subscribe({
+      next: (res: Stock) => { this.stock = res},
+      error: (error: any) => { console.error('Error:', error) }
+  });
   }
 }
