@@ -1,3 +1,6 @@
+import requests
+import json
+
 STOCKS = [
     {
         "ticker": "TSLA",
@@ -17,10 +20,26 @@ STOCKS = [
 ]
 
 def get_stocks(s_list):
-    if not s_list:
-        return STOCKS
+    return [get_stock(ticker) for ticker in s_list]
+
+def get_stock(ticker:str) -> dict:
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36"
+    }
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code != 200:
+        return None
     else:
-        return [stock for stock in STOCKS if stock["ticker"] in s_list]
+        data = response.json()
+        if not (latest_price := data["chart"]["result"][0]["meta"].get("regularMarketPrice")):
+            return None
+        
+        return {
+            "ticker": ticker,
+            "price": latest_price
+        }
 
 def get_a_single_stock(stockTicker:str):
     return next(filter(lambda stock: stock["ticker"] == stockTicker, STOCKS))

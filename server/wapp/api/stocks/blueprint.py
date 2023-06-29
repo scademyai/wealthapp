@@ -24,16 +24,12 @@ class Stock:
 
         # Validate stock symbols
         for symbol in symbols:
-            if not isinstance(symbol, str) or not symbol.isalnum() or not len(symbol) == 4:
+            if not isinstance(symbol, str) or not symbol.isalnum() or not len(symbol) <= 5:
                 current_app.logger.error("Invalid stock symbol.")
                 return jsonify({"error": "NOK"}), 400
 
-        stock_data = get_stocks(symbols)
-
-        # Check if get_stocks returns a valid response
-        if stock_data is None:
-            current_app.logger.error("Error retrieving stock data.")
-            return jsonify({"error": "NOK"}), 400
+        # return error if stock_data contains None elements
+        stock_data = list(filter(lambda x: x is not None , get_stocks(symbols)))
 
         current_app.logger.info(f"Stock symbols: {symbols}")
         return jsonify(stock_data), 200
