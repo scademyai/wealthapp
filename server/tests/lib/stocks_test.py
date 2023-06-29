@@ -1,7 +1,7 @@
 import unittest
 from unittest import mock
 from truth.truth import AssertThat
-from wapp.lib.stocks import get_stocks, get_stock
+from wapp.lib.stocks import get_stocks, get_stock, get_detailed_stock
 
 
 class TestStocks(unittest.TestCase):
@@ -72,6 +72,39 @@ class TestStocks(unittest.TestCase):
         AssertThat(result).ContainsKey("price")
         AssertThat(result["ticker"]).IsInstanceOf(str)
         AssertThat(result["price"]).IsInstanceOf(float)
+        
+    @mock.patch('requests.get')
+    def test_get_detailed_stock_return_stock(self, mock_get):
+        mock_response = mock.Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "chart": {
+                "result": [
+                    {"meta": {"regularMarketPrice": 100.00, 
+                              "currency": "USD", 
+                              "exchangeName": "NASDAQ", 
+                              "exchangeTimezoneName": "America/New_York", 
+                              "instrumentType": "EQUITY", 
+                              "previousClose": 99.00}
+                     
+                     }
+                ]
+            }
+        }
+
+        mock_get.return_value = mock_response
+        stock = get_detailed_stock("AAPL")
+        AssertThat(stock).IsEqualTo(
+        {
+            "ticker": "AAPL",
+            "price": 100.00,
+            "currency": "USD", 
+            "exchangeName": "NASDAQ", 
+            "exchangeTimezoneName": "America/New_York", 
+            "instrumentType": "EQUITY", 
+            "previousClose": 99.00
+        }
+    )
 
     def test_get_stock_invalid_ticker(self):
         ticker = "INVALID"

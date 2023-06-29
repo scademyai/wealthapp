@@ -27,4 +27,8 @@ export class HttpService {
   delete<T>(url: string) {
     return this.http.delete<T>(url, { headers: this.header });
   }
+
+  put<T>(url: string, payload: any) {
+    return this.http.put<T>(url, payload, { headers: this.header });
+  }
 }

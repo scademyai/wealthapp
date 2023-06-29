@@ -16,6 +16,7 @@ from flask_jwt_extended import (
 )
 from wapp.lib.session import create_session
 from wapp.api.stocks.blueprint import blueprint as stocks_blueprint
+from wapp.api.portfolio.blueprint import blueprint as portfolio_blueprint
 
 def __configure_cors(app):
     CORS(app, origins=["http://localhost:4200"])
@@ -35,6 +36,7 @@ def __configure_access_token(app):
 
 def __register_blueprints(app):
     app.register_blueprint(stocks_blueprint, url_prefix="/stocks")
+    app.register_blueprint(portfolio_blueprint, url_prefix="/portfolio")
 
 def create_app():
     app = Flask(__name__, static_folder="./client/dist")

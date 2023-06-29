@@ -7,11 +7,19 @@
         <span class="text-lg font-bold">
             {{ price }}$
         </span>
-        <button *ngIf="!myPortfolio" class="p-1 px-4 mt-4 rounded-lg bg-goldish" >
+        <button *ngIf="!myPortfolio && parent == 'stocks'" class="p-1 px-4 mt-4 rounded-lg bg-goldish" (click)="addToPortfolio()" >
             Add Stock
         </button>
-        <button *ngIf="myPortfolio" class="p-1 px-4 mt-4 rounded-lg bg-goldish">
+        <button *ngIf="myPortfolio && parent == 'stocks'" class="p-1 px-4 mt-4 rounded-lg bg-goldish" (click)="removeFromPortfolio()">
             Delete Stock
         </button>
+        <div *ngIf="parent == 'portfolio'">
+            <button class="p-1 px-4 mt-4 rounded-lg bg-goldish" (click)="updateQuantity(-1)">-</button>
+            <span class="text-md px-2">
+                {{ quantity }}
+            </span>
+            <button class="p-1 px-4 mt-4 rounded-lg bg-goldish" (click)="updateQuantity(1)">+</button>
+        </div>
+
     </div>
 </div>

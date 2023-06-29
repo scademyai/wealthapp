@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, current_app
-from wapp.lib.stocks import get_stock, get_stocks
+from wapp.lib.stocks import get_detailed_stock, get_stock, get_stocks
 
 blueprint = Blueprint('symbol', __name__)
 
@@ -11,6 +11,20 @@ def get_stock_route(symbol):
 
     # Return error if stock_data is None
     stock_data = get_stock(symbol)
+    if stock_data is None:
+        return jsonify({"error": "NOK"}), 400
+
+    current_app.logger.info(f"Stock symbol: {symbol}")
+    return jsonify(stock_data), 200
+
+@blueprint.get('/<symbol>/info')
+def get_stock_info_route(symbol):
+    
+    if res := validate_symbol(symbol):
+        return res
+
+    # Return error if stock_data is None
+    stock_data = get_detailed_stock(symbol)
     if stock_data is None:
         return jsonify({"error": "NOK"}), 400
 

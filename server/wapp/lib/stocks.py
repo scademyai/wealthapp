@@ -46,6 +46,33 @@ def get_stock(ticker:str) -> dict:
             "ticker": ticker,
             "price": latest_price
         }
+        
+def get_detailed_stock(ticker:str) -> dict:
+    
+    response = get_stock_response(ticker)
+    
+    if response.status_code != 200:
+        return None
+    else:
+        data = response.json()
+        if not (latest_price := data["chart"]["result"][0]["meta"].get("regularMarketPrice")):
+            return None
+        
+        currency = data["chart"]["result"][0]["meta"].get("currency")
+        exchange_name = data["chart"]["result"][0]["meta"].get("exchangeName")
+        exchange_timezone_name = data["chart"]["result"][0]["meta"].get("exchangeTimezoneName")
+        instrument_type = data["chart"]["result"][0]["meta"].get("instrumentType")
+        previous_close = data["chart"]["result"][0]["meta"].get("previousClose")
+        
+        return {
+            "ticker": ticker,
+            "price": latest_price,
+            "currency": currency,
+            "exchangeName": exchange_name,
+            "exchangeTimezoneName": exchange_timezone_name,
+            "instrumentType": instrument_type,
+            "previousClose": previous_close
+        }
 
 def get_a_single_stock(stockTicker:str):
     return next(filter(lambda stock: stock["ticker"] == stockTicker, STOCKS))

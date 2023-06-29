@@ -14,7 +14,7 @@
 <mat-grid-list cols="4" rowHeight="2:1" gutterSize="20px" class="mx-32">
     <mat-grid-tile *ngFor="let stock of stocks">
         <div>
-            <app-stock-card [ticker]="stock.ticker" [price]="stock.price" [myPortfolio]="false"></app-stock-card>
+            <app-stock-card [ticker]="stock.ticker" [price]="stock.price" [parent]="'stocks'"></app-stock-card>
         </div>
     </mat-grid-tile>
 </mat-grid-list>

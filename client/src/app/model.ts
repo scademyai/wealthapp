@@ -2,7 +2,12 @@
 export interface Stock {
     price: string,
     ticker: string,
-    volume: string
+    quantity: string,
+    currency?: string,
+    exchangeName?: string,
+    exchangeTimezoneName?: string,
+    instrumentType?: string,
+    previousClose?: string,
   }
   
 

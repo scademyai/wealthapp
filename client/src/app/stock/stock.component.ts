@@ -22,7 +22,7 @@ export class StockComponent {
 
   getStock(): void {
     let requestedStock = this.stockForm.value.filterBar!.toUpperCase();
-    this.http.get<Stock[]>(`/api/stocks/${requestedStock}`).pipe(
+    this.http.get<Stock[]>(`/api/stocks/${requestedStock}/info`).pipe(
       take(1),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 400) {

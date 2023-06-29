@@ -12,7 +12,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./stocks.component.scss']
 })
 export class StocksComponent implements OnInit{
-  constructor(private http: HttpService
+  constructor(private http: HttpService,
   ) {}
 
   ngOnInit(): void {

@@ -1,10 +1,17 @@
-
     <div class="flex justify-center uppercase font-bold text-5xl m-8">
-        <span>My Stocks</span></div>
+        <span>My Stocks</span>
+    </div>
     <mat-grid-list cols="4" rowHeight="2:1" gutterSize="20px" class="mx-32">
         <mat-grid-tile *ngFor="let stock of stocks">
             <div>
-                <app-stock-card [ticker]="stock.ticker" [price]="stock.price" [myPortfolio]="true"></app-stock-card>
+                <app-stock-card [ticker]="stock.ticker" [price]="stock.price" [quantity]="stock.quantity" [parent]="'portfolio'"></app-stock-card>
             </div>
         </mat-grid-tile>
     </mat-grid-list>
+    <div class="w-[90%] flex justify-center m-auto border-t-2 border-white">
+        <div class="pt-4">
+            <span class="text-2xl mr-6">Total: </span>
+            <span class="text-goldish font-bold text-4xl">{{ totalOfStocks }}$</span>
+        </div>
+        
+    </div>
